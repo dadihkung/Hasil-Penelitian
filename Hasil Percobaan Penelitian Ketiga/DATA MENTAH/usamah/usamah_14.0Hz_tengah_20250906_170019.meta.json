@@ -1,0 +1,9 @@
+{
+  "board_id": 0,
+  "connected": true,
+  "fs": 250,
+  "duration": 10.0,
+  "target": "tengah",
+  "freq": 14.0,
+  "file": "data_mentah2\\usamah\\usamah_14.0Hz_tengah_20250906_170019.csv"
+}

@@ -1,0 +1,24 @@
+{
+  "board_id": 0,
+  "connected": true,
+  "sampling_rate_hz": 250.0,
+  "blink_hz": 10.0,
+  "duration_s": 10.0,
+  "stimulus": {
+    "start_idx": 0,
+    "end_idx": 2482,
+    "start_time": 1756538579.902344,
+    "end_time": 1756538589.813102
+  },
+  "files": {
+    "raw_csv": "C:\\laragon\\www\\skripsi\\data_mentah_brainflow\\paeko71_recording_20250830_142246.csv",
+    "7": {
+      "epoch": "C:\\laragon\\www\\skripsi\\data_mentah_brainflow\\paeko71_recording_20250830_142246_epoch_ch7.csv",
+      "fft": "C:\\laragon\\www\\skripsi\\data_mentah_brainflow\\paeko71_recording_20250830_142246_fft_ch7.csv"
+    },
+    "8": {
+      "epoch": "C:\\laragon\\www\\skripsi\\data_mentah_brainflow\\paeko71_recording_20250830_142246_epoch_ch8.csv",
+      "fft": "C:\\laragon\\www\\skripsi\\data_mentah_brainflow\\paeko71_recording_20250830_142246_fft_ch8.csv"
+    }
+  }
+}

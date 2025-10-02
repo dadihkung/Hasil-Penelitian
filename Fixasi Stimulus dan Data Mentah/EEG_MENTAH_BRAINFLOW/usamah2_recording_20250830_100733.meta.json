@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+import json
+import pandas as pd
+import matplotlib.pyplot as plt
+from pathlib import Path
+
+def plot_fft_from_meta(meta_json_path):
+    """
+    Reads meta.json, loads FFT CSVs for channels 7 & 8, and plots them together.
+    """
+    meta_json_path = Path(meta_json_path)
+    if not meta_json_path.exists():
+        raise FileNotFoundError(f"{meta_json_path} not found!")
+
+    # Load JSON
+    with open(meta_json_path, "r") as f:
+        meta = json.load(f)
+
+    blink_hz = meta.get("blink_hz", None)
+    files = meta.get("files", {})
+    
+    ch7_fft = files.get("7", {}).get("fft", None)
+    ch8_fft = files.get("8", {}).get("fft", None)
+
+    if not ch7_fft or not ch8_fft:
+        raise ValueError("FFT CSV paths for channels 7 or 8 not found in meta.json!")
+
+    # Load FFT CSVs
+    df7 = pd.read_csv(ch7_fft)
+    df8 = pd.read_csv(ch8_fft)
+
+    plt.figure(figsize=(12, 6))
+    plt.plot(df7["freq_hz"], df7["power"], label="Channel 7 (O1)", color="blue")
+    plt.plot(df8["freq_hz"], df8["power"], label="Channel 8 (O2)", color="green")
+
+    # Highlight stimulus frequency
+    if blink_hz:
+        plt.axvline(blink_hz, color="red", linestyle="--", label=f"{blink_hz} Hz Stimulus")
+
+    plt.xlabel("Frequency (Hz)")
+    plt.ylabel("Power")
+    plt.title("FFT / PSD of EEG Channels 7 & 8")
+    plt.xlim(0, 60)
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
+
+if __name__ == "__main__":
+    meta_path = r"C:\laragon\www\skripsi\data_mentah_brainflow\usamah2_recording_20250830_100733.meta.json"
+    plot_fft_from_meta(meta_path)

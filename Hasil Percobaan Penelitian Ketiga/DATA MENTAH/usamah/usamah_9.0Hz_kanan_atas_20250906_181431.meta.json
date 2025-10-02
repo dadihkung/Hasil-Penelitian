@@ -1,0 +1,9 @@
+{
+  "board_id": 0,
+  "connected": true,
+  "fs": 250,
+  "duration": 10.0,
+  "target": "kanan_atas",
+  "freq": 9.0,
+  "file": "data_mentah2\\usamah\\usamah_9.0Hz_kanan_atas_20250906_181431.csv"
+}

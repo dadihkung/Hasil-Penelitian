@@ -1,0 +1,9 @@
+{
+  "board_id": 0,
+  "connected": true,
+  "fs": 250,
+  "duration": 10.0,
+  "target": "kiri_atas",
+  "freq": 8.0,
+  "file": "data_mentah2\\fahri\\fahri_8.0Hz_kiri_atas_20250908_173815.csv"
+}

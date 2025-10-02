@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Full Screen Container with Positioned Boxes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <style>
+    body, html { margin: 0; height: 100%; width: 100%; }
+    .full-screen-container { width: 100vw; height: 100vh; position: relative; background-color: #ffffff; }
+    .inner-box, .innerj-box {
+      width: 250px; height: 150px; border-radius: 10px; position: absolute;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 1.5rem; text-align: center; line-height: 1.5;
+    }
+    .inner-box { background-color: #000000; }
+    .top { top: 20px; left: 50%; transform: translateX(-50%); }
+    .bottom { bottom: 20px; left: 50%; transform: translateX(-50%); }
+    .right { top: 50%; right: 170px; transform: translateY(-50%); }
+    .left { top: 50%; left: 170px; transform: translateY(-50%); }
+    .center { top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; gap: 30px; }
+    .center-box { width: 450px; height: 200px; border-radius: 10px; display: flex; justify-content: center; align-items: center; gap: 20px; position: relative; }
+    .arah-box { width: 100px; height: 100px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; background-color: #000000; }
+    .arah-box i { font-size: 3rem; color: #ffffff; }
+    .icon-container { position: absolute; font-size: 2rem; color: #ff0000; z-index: 100; padding: 10px; text-align: center; display: none; }
+    .icon-show { display: block !important; }
+    .icon-bottom { bottom: 490px; left: 50%; transform: translateX(-50%); }
+    .icon-top { top: 490px; left: 50%; transform: translateX(-50%); }
+    .icon-right { top: 50%; right: 430px; transform: translateY(-50%); }
+    .icon-left { top: 50%; left: 430px; transform: translateY(-50%); }
+    .icon-fly, .icon-land { top: 50%; left: 370px; transform: translateY(-50%); }
+    .arrow-down-left { position: absolute; top: 50%; left: -130px; transform: translateY(-50%); font-size: 2rem; color: #ff0000; }
+    .arrow-down-right { position: absolute; top: 50%; right: 380px; transform: translateY(-50%); font-size: 2rem; color: #ff0000; }
+    .start-button {
+      position: absolute; top: 20px; left: 20px; z-index: 200;
+      background-color: #ffffff; color: #000000; border: none;
+      padding: 10px 20px; border-radius: 5px; font-size: 1rem; cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .loop-indicators { position: absolute; top: 20px; left: 100px; display: flex; gap: 10px; z-index: 200; }
+    .loop-indicator { width: 20px; height: 20px; border-radius: 50%; background-color: red; }
+    .loop-indicator.green { background-color: green; }
+  </style>
+</head>
+<body>
+  <div class="container-fluid full-screen-container">
+    <button class="start-button">Start</button>
+    <div class="loop-indicators">
+      <div class="loop-indicator"></div>
+      <div class="loop-indicator"></div>
+      <div class="loop-indicator"></div>
+      <div class="loop-indicator"></div>
+      <div class="loop-indicator"></div>
+    </div>
+    <div class="inner-box top stimulus-container text-light"><p>DEPAN</p></div>
+    <div class="icon-container icon-bottom"><i class="bi bi-caret-up-fill"></i></div>
+    <div class="inner-box bottom stimulus-container text-light"><p>BELAKANG</p></div>
+    <div class="icon-container icon-top"><i class="bi bi-caret-down-fill"></i></div>
+    <div class="inner-box right stimulus-container text-light"><p>KANAN</p></div>
+    <div class="icon-container icon-right"><i class="bi bi-caret-right-fill"></i></div>
+    <div class="inner-box left stimulus-container text-light"><p>KIRI</p></div>
+    <div class="icon-container icon-left"><i class="bi bi-caret-left-fill"></i></div>
+    <div class="innerj-box center">
+      <div class="arah-box fly stimulus-container d-flex justify-content-center align-items-center">
+        <i class="bi bi-arrow-up-circle-fill"></i>
+      </div>
+      <div class="icon-container icon-fly"><i class="bi bi-caret-right-fill arrow-down-right"></i></div>
+      <div class="arah-box land stimulus-container d-flex justify-content-center align-items-center">
+        <i class="bi bi-arrow-down-circle-fill"></i>
+      </div>
+      <div class="icon-container icon-land"><i class="bi bi-caret-left-fill arrow-down-left"></i></div>
+    </div>
+  </div>
+
+  <script>
+    let blinkingIntervals = [];
+    let blinkTimeout;
+    let pauseTimeout;
+    let loopCount = 0;
+    const maxLoops = 5;
+    let isRunning = false;
+
+    function blinkElement(element, frequency) {
+      const interval = 1000 / frequency;
+      let isVisible = true;
+      element.style.opacity = 1;
+
+      const intervalId = setInterval(() => {
+        element.style.opacity = isVisible ? 0 : 1;
+        isVisible = !isVisible;
+      }, interval);
+
+      blinkingIntervals.push(intervalId);
+    }
+
+    function stopBlinking() {
+      blinkingIntervals.forEach(id => clearInterval(id));
+      blinkingIntervals = [];
+      clearTimeout(blinkTimeout);
+      clearTimeout(pauseTimeout);
+    }
+
+    function updateLoopIndicators() {
+      const loopIndicators = document.querySelectorAll('.loop-indicator');
+      loopIndicators.forEach((indicator, index) => {
+        if (index < loopCount) {
+          indicator.classList.add('green');
+        } else {
+          indicator.classList.remove('green');
+        }
+      });
+    }
+
+    function startAnimations() {
+      if (isRunning) return;
+      isRunning = true;
+
+      const stimulusElements = document.querySelectorAll('.stimulus-container');
+      const icons = document.querySelectorAll('.icon-container');
+
+      const boxes = [
+        { element: stimulusElements[0], icon: document.querySelector('.icon-bottom'), frequency: 15.5 },
+        { element: stimulusElements[1], icon: document.querySelector('.icon-top'), frequency: 13.5 },
+        { element: stimulusElements[2], icon: document.querySelector('.icon-right'), frequency: 11.5 },
+        { element: stimulusElements[3], icon: document.querySelector('.icon-left'), frequency: 9.5 },
+        { element: stimulusElements[4], icon: document.querySelector('.icon-fly'), frequency: 5.5 },
+        { element: stimulusElements[5], icon: document.querySelector('.icon-land'), frequency: 7.5 }
+      ];
+
+      let currentIndex = 0;
+
+      function showNextBox() {
+        if (currentIndex >= boxes.length) {
+          loopCount++;
+          updateLoopIndicators();
+          if (loopCount >= maxLoops) {
+            stopBlinking();
+            setTimeout(() => location.reload(), 1000);
+            return;
+          }
+          currentIndex = 0;
+        }
+
+        const { element, icon, frequency } = boxes[currentIndex];
+        stopBlinking();
+        icons.forEach(i => i.classList.remove('icon-show'));
+        icon.classList.add('icon-show');
+        boxes.forEach(box => blinkElement(box.element, box.frequency));
+
+        blinkTimeout = setTimeout(() => {
+          stopBlinking();
+          icon.classList.remove('icon-show');
+          pauseTimeout = setTimeout(() => {
+            currentIndex++;
+            showNextBox();
+          }, 5000);
+        }, 7000);
+      }
+
+      showNextBox();
+      document.querySelector('.start-button').disabled = true;
+      document.querySelector('.start-button').textContent = 'Running...';
+    }
+
+    // Start with button
+    document.querySelector('.start-button').addEventListener('click', startAnimations);
+
+    // Start with spacebar (only when tab is focused)
+    document.addEventListener('keydown', function(event) {
+      if (event.code === 'Space') {
+        event.preventDefault(); // Prevent page scroll
+        startAnimations();
+      }
+    });
+  </script>
+</body>
+</html>
+ 

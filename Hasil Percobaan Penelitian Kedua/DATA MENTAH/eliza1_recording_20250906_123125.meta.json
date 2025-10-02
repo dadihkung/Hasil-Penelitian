@@ -1,0 +1,24 @@
+{
+  "board_id": 0,
+  "connected": true,
+  "sampling_rate_hz": 250.0,
+  "blink_hz": 8.0,
+  "duration_s": 10.0,
+  "stimulus": {
+    "start_idx": 0,
+    "end_idx": 2484,
+    "start_time": 1757136700.971854,
+    "end_time": 1757136710.888728
+  },
+  "files": {
+    "raw_csv": "C:\\laragon\\www\\skripsi\\data_mentah_brainflow\\eliza1_recording_20250906_123125.csv",
+    "7": {
+      "epoch": "C:\\laragon\\www\\skripsi\\data_mentah_brainflow\\eliza1_recording_20250906_123125_epoch_ch7.csv",
+      "fft": "C:\\laragon\\www\\skripsi\\data_mentah_brainflow\\eliza1_recording_20250906_123125_fft_ch7.csv"
+    },
+    "8": {
+      "epoch": "C:\\laragon\\www\\skripsi\\data_mentah_brainflow\\eliza1_recording_20250906_123125_epoch_ch8.csv",
+      "fft": "C:\\laragon\\www\\skripsi\\data_mentah_brainflow\\eliza1_recording_20250906_123125_fft_ch8.csv"
+    }
+  }
+}
